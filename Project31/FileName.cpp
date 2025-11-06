@@ -8,6 +8,10 @@ bool isNumeric(string s);
 bool isCorrectLength(string s);
 
 int main(void) {
+	//tests:
+	//4010046804271206
+	//4010-0468-0427-1206
+	//43589795
 
 	bool done = false;
 
@@ -37,15 +41,15 @@ int main(void) {
 
 			//convert user input to array of ints
 
-			int arr[8];
+			int arr[16];
 
-			for (int i = 0; i <= 7; i++) {
+			for (int i = 0; i <= 15; i++) {
 				string digit = cardNumber.substr(i, 1);
 				int d = stoi(digit);
 				arr[i] = d;
 			}
 
-			if (isCardValid(arr, 7)) {
+			if (isCardValid(arr, 15)) {
 				cout << "Card is valid";
 			}
 			else {
