@@ -2,71 +2,87 @@
 #include <string>
 using namespace std;
 
+//function prototype
+bool isCardValid(int digits[], int size);
+
 int main(void) {
 
+	bool done = false;
+
+	//int type used for input
 	int cardNumber;
-	cout << "Please enter 8-digit credit card number: ";
-	cin >> cardNumber;
 
-	int digits[8];
+	while (!done) {
+		cout << "\nEnter 8-digit credit card # or Q to quit: ";
+		cin >> cardNumber;
 
-	int digit;
-	int counter = 0;
-	while (cardNumber > 0) {
-		digit = cardNumber % 10;
-		cardNumber /= 10;
-		digits[counter] = digit;
-		counter++;
+
+		if (cin.fail()) {
+			done = true;
+		}
+		else {
+
+			//convert user input to array of ints
+
+			string num = to_string(cardNumber);
+			int arr[8];
+
+			for (int i = 0; i <= 7; i++) {
+				string digit = num.substr(i, 1);
+				int d = stoi(digit);
+				arr[i] = d;
+			}
+
+			if (isCardValid(arr, 7)) {
+				cout << "Card is valid";
+			}
+			else {
+				cout << "Card is not valid.";
+			}
+		}
+
+	}
+	
+	return 0;
+}
+
+
+
+bool isCardValid(int digits[], int size) {
+
+	// Starting from the rightmost digit, form the sum of every other digit
+
+	int sum = 0;
+	for (int i = size; i >= 0; i -= 2) {
+		sum += digits[i];
 	}
 
-	int sumOfDigits = 0;
-	for (int i = 0; i <= 7; i += 2) {
-		sumOfDigits += digits[i];
-	}
-
-
+	// Double each of the digits that were not included in the preceding step. 
+	// get the sum of the leftover digits
+	
 
 	int sumOfDoubled = 0;
-	int numOne;
-	int numTwo;
 
-
-	for (int i = 1; i <= 7; i += 2) {
-
-		digits[i] *= 2;
-
-		string number = to_string(digits[i]);
-		string digitOne = number.substr(0, 1);
-
-		numOne = stoi(digitOne);
-
-
-
-		sumOfDoubled += numOne;
-	
-	}
-
-	for (int i = 1; i <= 5; i += 2) {
-	
-
-
-		string number = to_string(digits[i]);
-
-		string digitTwo = number.substr(1, 2);
-
-		numTwo = stoi(digitTwo);
-
-
-		sumOfDoubled += numTwo;
+	for (int i = size-1; i >= 0; i -= 2) {
 		
+		int doubled = digits[i] * 2;
+
+		//adds one place digit
+		sumOfDoubled += doubled % 10;
+
+		if (doubled > 9) {
+			//adds 10s place digit
+			sumOfDoubled += (doubled / 10) % 100;
+		}
 
 	}
-	
 
-	if ((sumOfDoubled + sumOfDigits) % 10 == 0) {
-		cout << "Card is valid.";
+
+	// Add the sums of the two preceding steps. 
+	// If the last digit of the result is 0, the number is valid
+
+	if ((sum + sumOfDoubled) % 10 == 0) {
+		return true;
 	}
-	else {
-		cout << "Card is not valid.";
-	}
+	return false;
 }
