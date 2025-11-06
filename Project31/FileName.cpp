@@ -2,15 +2,17 @@
 #include <string>
 using namespace std;
 
-//function prototype
+//function prototypes
 bool isCardValid(int digits[], int size);
+bool isNumeric(string s);
+bool isCorrectLength(string s);
 
 int main(void) {
 
 	bool done = false;
 
-	//int type used for input
-	int cardNumber;
+	//string type used for input
+	string cardNumber;
 
 	while (!done) {
 		cout << "\nEnter 8-digit credit card # or Q to quit: ";
@@ -22,13 +24,23 @@ int main(void) {
 		}
 		else {
 
+			//checks if input is valid
+			if (!isNumeric(cardNumber)) {
+				cout << "Error - card number must contain only digits.";
+				continue;
+			}
+			else if (!isCorrectLength(cardNumber)) {
+				cout << "Error - card number must contain 16 digits.";
+				continue;
+			}
+
+
 			//convert user input to array of ints
 
-			string num = to_string(cardNumber);
 			int arr[8];
 
 			for (int i = 0; i <= 7; i++) {
-				string digit = num.substr(i, 1);
+				string digit = cardNumber.substr(i, 1);
 				int d = stoi(digit);
 				arr[i] = d;
 			}
@@ -85,4 +97,24 @@ bool isCardValid(int digits[], int size) {
 		return true;
 	}
 	return false;
+}
+
+bool isNumeric(string s) {
+
+	bool isNumeric = true;
+
+	for (int i = 0; i < s.length(); i++) {
+		if (tolower(s[i]) < 48 || tolower(s[i]) > 57) {
+			isNumeric = false;
+		}
+	}
+
+	return isNumeric;
+}
+
+bool isCorrectLength(string s) {
+
+	if (s.length() == 16) { return true; }
+	else { return false; }
+
 }
